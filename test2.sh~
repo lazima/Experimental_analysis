@@ -1,0 +1,67 @@
+#!/bin/bash
+###################################### for DP_2_opt ##########################################
+>k.out
+tl_fopt=0
+tl_time=0
+#run the octave file 20 times
+for ((i=0;i<hw_avg;i++));
+        
+	do
+		octave data_place_2opt.m >> k.out    
+    	done 
+#read two lines at a time from b.out
+while read -r line1; read -r line2
+do 
+	#split line using '='
+	IFS='='
+	read -a splt_val <<< "${line1}"
+    	read -a splt_t<<< "${line2}"
+	
+	value=${splt_val[1]}
+	tme=${splt_t[1]}
+
+	#cumilitive sum of fopt and time 
+	tl_fopt=$(awk "BEGIN {printf \"%.2f\",${tl_fopt}+${value}; exit(0)}")
+	tl_time=$(awk "BEGIN {printf \"%.2f\",${tl_time}+${tme}; exit(0)}")
+    #echo "Two lines $line1 and $line2"	
+done < k.out
+#average of op and tm
+av_val=$(awk "BEGIN {printf \"%.2f\",${tl_fopt}/${hw_avg}; exit(0)}") 
+av_t=$(awk "BEGIN {printf \"%.2f\",${tl_time}/${hw_avg}; exit(0)}") 
+echo $av_val > cap3_DP_2opt.txt
+echo $av_t > cap3_DP_2opt_time.txt
+
+###################################### for DP_3_opt ##########################################
+
+>l.out
+total_opt=0
+total_t=0
+#run the octave file 20 times
+for ((i=0;i<hw_avg;i++));
+        
+	do
+		octave data_place_3opt.m >> l.out    
+    	done 
+#read two lines at a time from b.out
+while read -r line1; read -r line2
+do 
+	#split line using '='
+	IFS='='
+	read -a split_result <<< "${line1}"
+    	read -a splt_time<<< "${line2}"
+	
+	result=${split_result[1]}
+	t=${splt_time[1]}
+
+	#cumilitive sum of fopt and time 
+	total_opt=$(awk "BEGIN {printf \"%.2f\",${total_opt}+${result}; exit(0)}")
+	total_t=$(awk "BEGIN {printf \"%.2f\",${total_t}+${t}; exit(0)}")
+    #echo "Two lines $line1 and $line2"	
+done < l.out
+#average of op and tm
+average_result=$(awk "BEGIN {printf \"%.2f\",${total_opt}/${hw_avg}; exit(0)}") 
+average_t=$(awk "BEGIN {printf \"%.2f\",${total_t}/${hw_avg}; exit(0)}") 
+echo $average_result > cap3_DP_3opt.txt
+echo $average_t > cap3_DP_3opt_time.txt
+
+

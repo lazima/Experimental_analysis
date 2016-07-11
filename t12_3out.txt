@@ -1,0 +1,3 @@
+
+Opening Cost				Assignment Cost				Total Cost			Time in seconds
+1432.000000						2947.515095							4379.515095			1993.278527
